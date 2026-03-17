@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Surah } from '@/lib/quranApi';
 import { Play, Search } from 'lucide-react';
 
@@ -11,7 +12,10 @@ interface SurahCardProps {
 
 export function SurahCard({ surah }: SurahCardProps) {
   return (
-    <Link href={`/surah/${surah.id}`}>
+    <Link href={`/surah/${surah.id}`} onClick={() => {
+      // Save current scroll position before navigating
+      sessionStorage.setItem('surah-list-scroll', window.scrollY.toString());
+    }}>
       <div className="card-modern h-full flex flex-col group cursor-pointer border-transparent hover:border-emerald-500/30">
         <div className="flex justify-between items-center mb-6">
           <span className="text-xs font-black px-3 py-1 bg-secondary text-secondary-foreground rounded-full uppercase tracking-widest">
@@ -41,12 +45,30 @@ export function SurahCard({ surah }: SurahCardProps) {
 export function SurahList({ surahs }: { surahs: Surah[] }) {
   const [searchQuery, setSearchQuery] = useState('');
 
+  useEffect(() => {
+    // Restore scroll position
+    const savedScroll = sessionStorage.getItem('surah-list-scroll');
+    if (savedScroll) {
+      setTimeout(() => {
+        window.scrollTo(0, parseInt(savedScroll));
+        // Optional: clear it after restore if you want it to reset on manual refresh
+        // sessionStorage.removeItem('surah-list-scroll');
+      }, 100);
+    }
+  }, []);
+
+  const normalize = (text: string) => {
+    return text.toLowerCase().replace(/[^a-z0-9]/g, '');
+  };
+
   const filteredSurahs = surahs.filter((surah) => {
-    const query = searchQuery.toLowerCase();
+    const query = normalize(searchQuery);
+    if (!query) return true;
+    
     return (
-      surah.name_complex.toLowerCase().includes(query) ||
+      normalize(surah.name_complex).includes(query) ||
       surah.id.toString().includes(query) ||
-      surah.translated_name.name.toLowerCase().includes(query)
+      normalize(surah.translated_name.name).includes(query)
     );
   });
 

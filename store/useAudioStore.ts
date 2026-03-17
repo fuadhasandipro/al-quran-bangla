@@ -20,6 +20,7 @@ interface AudioState {
   playAyah: (ayahId: string, startTime: number) => void;
   playNextAyah: () => void;
   playPreviousAyah: () => void;
+  resetAudio: () => void;
 }
 
 export const useAudioStore = create<AudioState>((set, get) => ({
@@ -81,5 +82,11 @@ export const useAudioStore = create<AudioState>((set, get) => ({
         isPlaying: true
       });
     }
-  }
+  },
+  resetAudio: () => set({ 
+    audioUrl: null, 
+    currentAyahId: null, 
+    isPlaying: false, 
+    currentTime: 0 
+  })
 }));

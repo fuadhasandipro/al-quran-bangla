@@ -36,9 +36,9 @@ export function AyahCard({ ayah }: AyahCardProps) {
   return (
     <div
       ref={cardRef}
-      onClick={handleTogglePlay}
+      id={`ayah-${ayah.verse_key.split(':')[1]}`}
       className={cn(
-        "card-modern mb-6 group relative overflow-hidden transition-all duration-500 cursor-pointer",
+        "card-modern mb-6 group relative overflow-hidden transition-all duration-500",
         isActive ? "border-primary ring-1 ring-primary/20 bg-primary/[0.02]" : ""
       )}
     >
@@ -62,11 +62,19 @@ export function AyahCard({ ayah }: AyahCardProps) {
       </div>
 
       <div className="space-y-8">
-        <p className="arabic-text text-3xl md:text-5xl text-right leading-[2.5] text-foreground font-medium">
+        <p className="arabic-text text-3xl text-right leading-[2]  text-foreground font-medium">
           {ayah.text_uthmani}
         </p>
 
         <div className="space-y-6">
+
+          <div className="space-y-2">
+            <p className="text-xs font-black text-emerald-600 uppercase tracking-[0.2em] opacity-70">Translation</p>
+            <p className="text-xl font-bold text-foreground leading-relaxed font-bengali">
+              {ayah.translations[0].text.replace(/<[^>]*>?/gm, '')}
+            </p>
+          </div>
+
           {/* Pronunciation block */}
           {ayah.pronunciation && (
             <div className="p-4 rounded-2xl bg-secondary/50 border border-border/50">
@@ -77,12 +85,7 @@ export function AyahCard({ ayah }: AyahCardProps) {
             </div>
           )}
 
-          <div className="space-y-2">
-            <p className="text-xs font-black text-emerald-600 uppercase tracking-[0.2em] opacity-70">Translation</p>
-            <p className="text-xl font-bold text-foreground leading-relaxed font-bengali">
-              {ayah.translations[0].text.replace(/<[^>]*>?/gm, '')}
-            </p>
-          </div>
+
         </div>
       </div>
 

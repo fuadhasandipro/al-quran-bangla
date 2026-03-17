@@ -2,8 +2,8 @@
 
 import { useAudioStore } from '@/store/useAudioStore';
 import { cn } from '@/lib/utils';
-import { Play, Pause, SkipBack, SkipForward, Volume2 } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { Play, Pause, SkipBack, SkipForward, Volume2, X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
 export function AudioPlayer() {
   const { 
@@ -17,7 +17,8 @@ export function AudioPlayer() {
     currentSurahId,
     currentAyahId,
     playNextAyah,
-    playPreviousAyah
+    playPreviousAyah,
+    resetAudio
   } = useAudioStore();
 
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -48,8 +49,17 @@ export function AudioPlayer() {
   if (!audioUrl) return null;
 
   return (
-    <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-md pointer-events-none">
-      <div className="card-modern backdrop-blur-2xl bg-card/90 px-6 py-4 flex items-center gap-4 border border-border shadow-2xl pointer-events-auto">
+    <div className={cn(
+      "fixed bottom-10 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-md transition-all duration-500 ease-out transform",
+      audioUrl ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0 pointer-events-none"
+    )}>
+      <div className="card-modern backdrop-blur-2xl bg-card/90 px-6 py-4 flex items-center gap-4 border border-border shadow-2xl relative">
+        <button 
+          onClick={() => resetAudio()}
+          className="absolute -top-2 -right-2 p-1.5 bg-background border border-border rounded-full text-muted-foreground hover:text-foreground transition-all shadow-sm active:scale-90"
+        >
+          <X size={12} />
+        </button>
         <audio
           ref={audioRef}
           src={audioUrl}

@@ -9,11 +9,8 @@ export function AudioInitializer({ ayahs, surahId }: { ayahs: Ayah[], surahId: n
 
   useEffect(() => {
     setPlaylist(ayahs);
-    if (ayahs.length > 0) {
-      setAudioUrl(ayahs[0].audio_url || '');
-    }
     setCurrentSurah(surahId);
-  }, [ayahs, surahId, setAudioUrl, setCurrentSurah, setPlaylist]);
+  }, [ayahs, surahId, setCurrentSurah, setPlaylist]);
 
   return null;
 }

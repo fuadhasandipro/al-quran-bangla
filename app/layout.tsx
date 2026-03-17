@@ -22,6 +22,7 @@ export const metadata: Metadata = {
 
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 export default function RootLayout({
   children,
@@ -33,9 +34,10 @@ export default function RootLayout({
       <body className="antialiased selection:bg-emerald-100 selection:text-emerald-900 bg-background text-foreground">
         <ThemeProvider>
           <Header />
-          <main className="min-h-screen pb-24">
+          <main className="min-h-screen">
             {children}
           </main>
+          <Footer />
           <AudioPlayer />
         </ThemeProvider>
       </body>
